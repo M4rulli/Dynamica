@@ -1,0 +1,119 @@
+.container {
+  width: 700px;
+  height: 1024px;
+  overflow: hidden;
+}
+
+#Toolbar {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-direction: row;
+  margin: 0;
+  padding: 8px;
+  width: auto;
+  border-radius: 18px;
+  border: 1px solid var(--sidebar-border);
+  background: linear-gradient(180deg, var(--sidebar-surface), var(--sidebar-elevated));
+  box-shadow: var(--sidebar-shadow);
+  backdrop-filter: blur(12px);
+  color: var(--sidebar-text);
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 25;
+}
+
+#Toolbar li {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  position: relative;
+}
+
+#Toolbar li.grip {
+  cursor: move;
+}
+
+#Toolbar button {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--sidebar-muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+#Toolbar button i,
+#Toolbar li.grip i {
+  font-size: 1.2rem;
+}
+
+#Toolbar button:hover,
+#Toolbar .active button {
+  background: var(--sidebar-accent-soft);
+  color: var(--sidebar-accent);
+  border-color: var(--sidebar-line);
+}
+
+#Toolbar span.label {
+  display: none;
+}
+
+#Toolbar li .color-wrapper {
+  border-radius: 50%;
+  background: var(--sidebar-accent);
+  height: 24px;
+  width: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.25);
+  margin: 0;
+  cursor: pointer;
+}
+
+#Toolbar li .color-wrapper input[type="color"] {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+#Toolbar .right-separator::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 9px;
+  height: 24px;
+  width: 1px;
+  background: var(--sidebar-line);
+  border-radius: 999px;
+}
+
+#Toolbar .dropdown {
+  display: none;
+}
+
+.wire-icon circle {
+  fill: #ffffff;
+  stroke: #111827;
+}
+
+.wire-icon line {
+  stroke: #111827;
+}
+
+body.dark-theme .wire-icon circle {
+  fill: #0f172a;
+  stroke: #e2e8f0;
+}
+
+body.dark-theme .wire-icon line {
+  stroke: #e2e8f0;
+}

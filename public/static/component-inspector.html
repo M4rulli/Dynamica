@@ -1,0 +1,52 @@
+<div id="component-inspector-panel" class="component-inspector">
+  <button id="component-inspector-toggle" class="component-inspector__handle" type="button" aria-label="Mostra o nascondi inspector" aria-pressed="false">
+    <i class="bx bx-chevrons-right"></i>
+  </button>
+
+  <div class="component-inspector__content">
+    <div class="component-inspector__header">
+      <h3>Inspector</h3>
+      <span id="inspector-type" class="component-inspector__type">Nessuna selezione</span>
+    </div>
+
+    <form id="inspector-form" class="component-inspector__form" hidden>
+      <label class="component-inspector__field">
+        <span>Etichetta</span>
+        <input id="inspector-label" type="text" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <label id="inspector-value-field" class="component-inspector__field">
+        <span id="inspector-value-label">Valore</span>
+        <div class="component-inspector__value-wrap">
+          <input id="inspector-value" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 300" />
+          <span id="inspector-unit" class="component-inspector__unit">Ω</span>
+        </div>
+      </label>
+
+      <label id="inspector-current-field" class="component-inspector__field">
+        <span>Corrente</span>
+        <div class="component-inspector__value-wrap">
+          <input id="inspector-current" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 1.2" />
+          <span class="component-inspector__unit">A</span>
+        </div>
+        <label class="component-inspector__check">
+          <input id="inspector-current-unknown" type="checkbox" checked />
+          <span>Corrente incognita</span>
+        </label>
+      </label>
+
+      <label id="inspector-voltage-field" class="component-inspector__field">
+        <span>Tensione</span>
+        <div class="component-inspector__value-wrap">
+          <input id="inspector-voltage" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 12" />
+          <span class="component-inspector__unit">V</span>
+        </div>
+        <label class="component-inspector__check">
+          <input id="inspector-voltage-unknown" type="checkbox" checked />
+          <span>Tensione incognita</span>
+        </label>
+      </label>
+
+    </form>
+  </div>
+</div>

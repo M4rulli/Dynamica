@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamica Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.svg" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+  <link rel="stylesheet" href="/src/styles/navbar.css">
+  <link rel="stylesheet" href="/src/styles/toolbar.css">
+  <link rel="stylesheet" href="/src/styles/theme.css">
+  <link rel="stylesheet" href="/src/styles/grid.css">
+  <link rel="stylesheet" href="/src/styles/settings.css">
+  <link rel="stylesheet" href="/src/styles/component-inspector.css">
+</head>
+<body style="margin: 0; overflow: hidden; position: relative;">
+  <div id="canvas-container" style="width: 100vw; height: 100vh;"></div>
+  <div id="nav-bar"></div>
+  <div id="Container" class="container bound">
+    <floating-toolbar></floating-toolbar>
+  </div>
+  <div id="component-inspector"></div>
+  <div id="settings-panel" class="menu-container"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

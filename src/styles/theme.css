@@ -1,0 +1,65 @@
+:root {
+  --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --line-height: 1.5;
+  --font-weight: 400;
+
+  --color: #213547;
+  --background-color: #fff;
+
+  --link-color: #646cff;
+  --link-hover-color: #535bf2;
+
+  --button-bg: #f9f9f9;
+  --button-border-hover: #646cff;
+
+  --grid-minor: #444;
+  --grid-major: #666;
+  --canvas-background: white;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+body.dark-theme {
+  --color: rgba(255, 255, 255, 0.87);
+  --background-color: #444;
+  --color: white;
+
+
+  --link-color: #8fa2ff;
+  --link-hover-color: #aab1ff;
+
+  --button-bg: #1a1a1a;
+  --button-border-hover: #8fa2ff;
+
+  --grid-minor: rgba(148, 163, 184, 0.18);
+  --grid-major: rgba(56, 189, 248, 0.32);
+  --canvas-background: #111827;
+}
+
+
+.nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.04); /* default chiaro */
+}
+
+body.dark-theme .nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.06); /* più visibile in dark mode */
+}
+
+body, * {
+  transition: 
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    fill 0.4s ease,
+    stroke 0.4s ease;
+}
+
+svg {
+  color: black;
+}
+
+.dark-theme svg {
+  color: white;
+}

@@ -1,0 +1,131 @@
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 2px 0 10px;
+}
+
+.component-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 94px;
+  border-radius: 12px;
+  border: 1px solid var(--sidebar-line);
+  background: rgba(148, 163, 184, 0.08);
+  cursor: grab;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+}
+
+.component-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--sidebar-accent);
+  background: var(--sidebar-accent-soft);
+}
+
+.component-item img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: none;
+}
+
+.component-item .label {
+  font-size: 0.76rem;
+  color: var(--sidebar-text);
+  text-align: center;
+  font-weight: 600;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.component-item * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.dark-theme .component-item {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+body.dark-theme .component-item img {
+  filter: invert(92%) sepia(11%) saturate(276%) hue-rotate(180deg) brightness(97%) contrast(92%);
+}
+
+.terminal {
+  opacity: 0;
+  stroke: red;
+  stroke-width: 1;
+  fill: transparent;
+  transition: opacity 0.2s ease, fill 0.2s ease;
+}
+
+svg .terminal.visible {
+  opacity: 1;
+  fill: red;
+  cursor: grab;
+}
+
+svg .terminal.active {
+  fill: var(--highlight-color, #64ffda);
+  cursor: grabbing;
+}
+
+svg .body-bbox {
+  stroke-opacity: 0;
+  stroke: red;
+}
+
+svg .selected .body-bbox {
+  visibility: visible;
+  stroke: red;
+  stroke-opacity: 1;
+  stroke-dasharray: 4;
+  animation: bboxPulse 1s ease-in-out infinite;
+  cursor: grab;
+}
+
+@keyframes pulse {
+  0% { r: 5; opacity: 1; }
+  50% { r: 7; opacity: 0.6; }
+  100% { r: 5; opacity: 1; }
+}
+
+svg .terminal.active {
+  animation: pulse 1s infinite;
+}
+
+svg g:hover:not(.selected) {
+  filter: brightness(1.05);
+  cursor: pointer;
+}
+
+svg text {
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+}
+
+.math-label-host,
+.component-math-label,
+.component-math-label * {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+}
+
+.component-math-label--plain {
+  font-weight: 600;
+}
+
+@keyframes bboxPulse {
+  0% { stroke-opacity: 0.6; }
+  50% { stroke-opacity: 1; }
+  100% { stroke-opacity: 0.6; }
+}

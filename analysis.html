@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamica Analysis</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.svg" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+  <link rel="stylesheet" href="/src/styles/analysis.css">
+</head>
+<body>
+  <main class="analysis-page">
+    <header class="analysis-header">
+      <a class="analysis-brand" href="/"><i class="bx bx-bolt-circle"></i><span>Dynamica</span></a>
+      <a class="analysis-link" href="/editor.html">Torna Editor</a>
+    </header>
+
+    <section class="analysis-card">
+      <div class="analysis-title-row">
+        <h1>Ambiente di Analisi Circuitale</h1>
+        <div class="analysis-title-actions">
+          <span id="analysis-status-pill" class="status-pill">In attesa</span>
+          <button id="analysis-reset-btn" class="analysis-action-btn" type="button">
+            <i class="bx bx-eraser"></i>
+            <span>Pulisci</span>
+          </button>
+          <button id="analysis-save-btn" class="analysis-action-btn" type="button" disabled>
+            <i class="bx bx-save"></i>
+            <span>Salva</span>
+          </button>
+        </div>
+      </div>
+      <p id="analysis-job-meta" class="analysis-meta"></p>
+    </section>
+
+    <section class="analysis-card">
+      <h2>Riepilogo Circuito</h2>
+      <div id="analysis-circuit-summary" class="analysis-summary-grid"></div>
+    </section>
+
+    <section class="analysis-card">
+      <div class="analysis-section-head">
+        <h2>Configurazione Analisi</h2>
+        <button id="analysis-help-btn" class="analysis-help-btn" type="button" aria-label="Apri guida teoria analisi">
+          <i class="bx bx-question-mark"></i>
+        </button>
+      </div>
+      <div class="analysis-config-layout">
+        <div class="analysis-config-group">
+          <div class="analysis-config-title">Dominio Operativo</div>
+          <label class="analysis-choice">
+            <input type="radio" name="analysis-domain" value="time" checked />
+            <span>Dominio del Tempo</span>
+          </label>
+          <label class="analysis-choice">
+            <input type="radio" name="analysis-domain" value="laplace" />
+            <span>Dominio di Laplace</span>
+          </label>
+        </div>
+
+        <div class="analysis-config-group">
+          <div class="analysis-config-title">Regime</div>
+          <label class="analysis-choice">
+            <input type="radio" name="analysis-regime" value="dc" checked />
+            <span>DC (Corrente Continua)</span>
+          </label>
+          <label class="analysis-choice">
+            <input type="radio" name="analysis-regime" value="ac" />
+            <span>AC (Corrente Alternata)</span>
+          </label>
+          <label class="analysis-choice">
+            <input type="checkbox" id="analysis-laplace-classic" />
+            <span>Laplace Classico</span>
+          </label>
+        </div>
+
+        <div class="analysis-config-group">
+          <div class="analysis-config-title">Metodo</div>
+          <div class="analysis-method-grid">
+            <button id="run-analysis-mesh" class="analysis-method-btn analysis-method-btn--primary" type="button">
+              <i class="bx bx-shape-polygon"></i>
+              <span>Analisi alle Maglie</span>
+            </button>
+            <button id="run-analysis-nodal" class="analysis-method-btn analysis-method-btn--primary" type="button">
+              <i class="bx bx-git-branch"></i>
+              <span>Analisi ai Nodi</span>
+            </button>
+            <button class="analysis-method-btn" type="button" disabled>
+              <i class="bx bx-cube"></i>
+              <span>Thevenin/Norton (Dummy)</span>
+            </button>
+            <button class="analysis-method-btn" type="button" disabled>
+              <i class="bx bx-wave-square"></i>
+              <span>Transitorio (Dummy)</span>
+            </button>
+            <button class="analysis-method-btn" type="button" disabled>
+              <i class="bx bx-graph"></i>
+              <span>Risposta in Frequenza (Dummy)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="analysis-results-section" class="analysis-results is-hidden">
+      <section class="analysis-card">
+        <h2>Informazioni Grafo</h2>
+        <div id="analysis-graph" class="analysis-grid"></div>
+      </section>
+
+      <section class="analysis-card">
+        <h2>Output LaTeX</h2>
+        <div id="analysis-latex" class="analysis-latex"></div>
+      </section>
+
+      <section class="analysis-card">
+        <h2>Tabella Elementi (I, V, P)</h2>
+        <div id="analysis-power-table"></div>
+      </section>
+
+      <section class="analysis-card">
+        <h2>Bilancio di Potenza</h2>
+        <div id="analysis-power-balance" class="analysis-latex"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="analysis-help-modal" class="analysis-modal" aria-hidden="true">
+    <div class="analysis-modal-backdrop" data-close-modal="true"></div>
+    <div class="analysis-modal-panel" role="dialog" aria-modal="true" aria-labelledby="analysis-help-title">
+      <div class="analysis-modal-head">
+        <h3 id="analysis-help-title">Guida Rapida Teorica</h3>
+        <button id="analysis-help-close" class="analysis-modal-close" type="button" aria-label="Chiudi guida">
+          <i class="bx bx-x"></i>
+        </button>
+      </div>
+      <div class="analysis-modal-body">
+        <section class="analysis-theory-block">
+          <h4>Scelta del Dominio</h4>
+          <p><strong>Tempo:</strong> usa equazioni differenziali dirette del circuito.</p>
+          <p><strong>Laplace:</strong> converte in algebra nel dominio <em>s</em> tramite impedenze equivalenti.</p>
+          <p><strong>DC/AC:</strong> in DC si cercano condizioni statiche, in AC si lavora in regime sinusoidale.</p>
+        </section>
+        <section class="analysis-theory-block">
+          <h4>Analisi alle Maglie</h4>
+          <p>Si definiscono correnti di maglia indipendenti e si applica la LKT a ogni maglia fondamentale.</p>
+          <p>Forma compatta: <span>\( A I = b \)</span>, dove \(I\) sono le correnti di maglia.</p>
+        </section>
+        <section class="analysis-theory-block">
+          <h4>Analisi ai Nodi</h4>
+          <p>Si scelgono tensioni nodali incognite e si applica la LKC ai nodi non di riferimento.</p>
+          <p>Il sistema risultante fornisce tensioni e correnti di ramo.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/analysis/analysisMain.ts"></script>
+</body>
+</html>

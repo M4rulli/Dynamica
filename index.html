@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamica | Circuit Design Studio</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+  <link rel="stylesheet" href="/src/styles/landing.css">
+</head>
+<body>
+  <main class="landing">
+    <div class="landing-theme-toggle">
+      <span>Tema</span>
+      <button id="landing-theme-btn" type="button" aria-label="Cambia tema landing" aria-pressed="false">
+        <i class="bx bx-moon"></i>
+      </button>
+    </div>
+
+    <section class="landing__section">
+      <div class="landing__panel landing__panel--hero landing__reveal">
+        <div class="hero-copy">
+          <p class="landing__hero-kicker">Circuit Workspace</p>
+          <h1 class="landing__hero-title">Disegna e analizza circuiti professionali in un battibaleno.</h1>
+          <p class="landing__hero-sub">
+            Costruzione visuale, inspector avanzato, etichette matematiche ed export SVG/LaTeX nello stesso flusso.
+          </p>
+          <div class="hero-ctas">
+            <a class="landing__cta" href="/editor.html">Entra Nell'Editor <i class="bx bx-right-arrow-alt"></i></a>
+            <a class="landing__cta landing__cta--ghost" href="#features">Scopri di più</a>
+          </div>
+        </div>
+        <div class="hero-visual" id="hero-visual">
+          <div class="hero-orb hero-orb--a"></div>
+          <div class="hero-orb hero-orb--b"></div>
+          <svg viewBox="0 0 560 370" class="circuit-showcase" aria-hidden="true">
+            <defs>
+              <linearGradient id="wireGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#66ddff"/>
+                <stop offset="100%" stop-color="#5b8dff"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2.6" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <rect x="16" y="14" width="528" height="340" rx="24" class="showcase-bg"/>
+            <rect x="32" y="38" width="106" height="292" rx="16" class="showcase-left"/>
+            <rect x="152" y="38" width="270" height="292" rx="16" class="showcase-canvas"/>
+            <rect x="434" y="38" width="94" height="292" rx="16" class="showcase-right"/>
+
+            <g class="showcase-grid">
+              <path d="M170 74H404M170 108H404M170 142H404M170 176H404M170 210H404M170 244H404M170 278H404" />
+              <path d="M194 56V312M228 56V312M262 56V312M296 56V312M330 56V312M364 56V312M398 56V312" />
+            </g>
+
+            <g class="sidebar-mock">
+              <rect x="46" y="66" width="78" height="44" rx="10"/>
+              <rect x="46" y="120" width="78" height="44" rx="10"/>
+              <rect x="46" y="174" width="78" height="44" rx="10"/>
+              <rect x="46" y="228" width="78" height="44" rx="10"/>
+            </g>
+
+            <g transform="translate(148 34) scale(1.35)">
+              <g class="demo-circuit-shadow">
+                <path d="M60 60H156V164H60Z" />
+              </g>
+              <g class="demo-current-flow">
+                <path class="demo-current-loop" d="M60 60H156V164H60Z" />
+              </g>
+              <g class="demo-circuit-wires">
+                <line x1="60" y1="60" x2="100" y2="60" />
+                <line x1="116" y1="60" x2="156" y2="60" />
+                <line x1="60" y1="60" x2="60" y2="98" />
+                <line x1="60" y1="126" x2="60" y2="164" />
+                <line x1="156" y1="60" x2="156" y2="82" />
+                <line x1="156" y1="142" x2="156" y2="164" />
+                <line x1="60" y1="164" x2="156" y2="164" />
+
+                <line x1="100" y1="48" x2="100" y2="72" />
+                <line x1="116" y1="48" x2="116" y2="72" />
+
+                <g transform="rotate(90, 60, 112)">
+                  <circle cx="60" cy="112" r="14" />
+                  <line x1="54.5" y1="107.5" x2="54.5" y2="116.5" />
+                  <line x1="50.5" y1="112" x2="58.5" y2="112" />
+                  <line x1="63.5" y1="112" x2="70" y2="112" />
+                </g>
+
+                <g transform="rotate(90, 156, 112)">
+                  <path d="M -30,0 L-25,-10 L-15,10 L-5,-10 L5,10 L15,-10 L25,10 L30,0" transform="translate(156,112)" />
+                </g>
+              </g>
+
+              <g class="demo-circuit-nodes">
+                <circle cx="60" cy="60" r="3.7" />
+                <circle cx="156" cy="60" r="3.7" />
+                <circle cx="60" cy="164" r="3.7" />
+                <circle cx="156" cy="164" r="3.7" />
+              </g>
+
+              <g class="demo-circuit-labels">
+                <text x="108" y="42" text-anchor="middle">C1</text>
+                <text x="40" y="116" text-anchor="end">V1</text>
+                <text x="176" y="116" text-anchor="start">R1</text>
+              </g>
+            </g>
+            <g class="inspector-mock">
+              <rect x="446" y="62" width="68" height="20" rx="7"/>
+              <rect x="446" y="92" width="68" height="28" rx="8"/>
+              <rect x="446" y="128" width="50" height="10" rx="5"/>
+              <rect x="446" y="145" width="62" height="10" rx="5"/>
+            </g>
+
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="landing__section">
+      <div class="landing__panel landing__reveal">
+        <h2 class="landing__hero-title section-title">Una pipeline completa, senza passaggi manuali.</h2>
+        <div class="landing__grid">
+          <article class="landing__card">
+            <h4>Disegno Intelligente</h4>
+            <p>Snap su griglia, rotazioni e strumenti di selezione/clone per comporre schemi rapidamente.</p>
+          </article>
+          <article class="landing__card">
+            <h4>Inspector Tecnico</h4>
+            <p>Gestisci etichette e parametri elettrici con regole coerenti su ogni tipo di componente.</p>
+          </article>
+          <article class="landing__card">
+            <h4>Export Pronto</h4>
+            <p>Generazione istantanea in SVG professionale o sorgente LaTeX CircuitikZ.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing__section">
+      <div class="landing__panel landing__reveal">
+        <h2 class="landing__hero-title section-title">Progettato per continuità e precisione.</h2>
+        <div class="landing__stats">
+          <div class="landing__stat"><strong>Auto Save</strong><span>Circuito ripristinato dopo refresh</span></div>
+          <div class="landing__stat"><strong>Math Labels</strong><span>Rendering tipografico tecnico</span></div>
+          <div class="landing__stat"><strong>Dark/Light</strong><span>Interfaccia coerente sui temi</span></div>
+        </div>
+        <p class="landing__hero-sub">Apri l'editor e riparti dallo stato precedente senza perdere il lavoro locale.</p>
+        <a class="landing__cta" href="/editor.html">Vai all'Editor <i class="bx bx-right-arrow-alt"></i></a>
+      </div>
+    </section>
+
+    <footer class="landing-footer">
+      <div class="landing-footer__inner">
+        <div class="landing-footer__brand">
+          <span class="brand-mark"></span>
+          <strong>Dynamica</strong>
+        </div>
+        <div class="landing-footer__links">
+          <a href="https://github.com/marulls/dynamics" target="_blank" rel="noopener noreferrer">
+            <i class="bx bxl-github"></i> Repository GitHub
+          </a>
+          <span>© 2026 Dynamica. Tutti i diritti riservati.</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const revealNodes = Array.from(document.querySelectorAll(".landing__reveal"));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    }, { threshold: 0.24 });
+    revealNodes.forEach((node) => observer.observe(node));
+
+    const themeBtn = document.getElementById("landing-theme-btn");
+    const savedTheme = localStorage.getItem("theme");
+    const applyTheme = (mode) => {
+      const isLight = mode === "light";
+      document.body.classList.toggle("landing-light", isLight);
+      document.body.classList.toggle("landing-dark", !isLight);
+      if (themeBtn) {
+        themeBtn.setAttribute("aria-pressed", isLight ? "true" : "false");
+        themeBtn.innerHTML = isLight ? '<i class="bx bx-sun"></i>' : '<i class="bx bx-moon"></i>';
+      }
+    };
+    applyTheme(savedTheme === "light" ? "light" : "dark");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        const next = document.body.classList.contains("landing-light") ? "dark" : "light";
+        localStorage.setItem("theme", next);
+        applyTheme(next);
+      });
+    }
+
+    const hero = document.getElementById("hero-visual");
+    if (hero) {
+      hero.addEventListener("mousemove", (evt) => {
+        const bounds = hero.getBoundingClientRect();
+        const x = (evt.clientX - bounds.left) / bounds.width - 0.5;
+        const y = (evt.clientY - bounds.top) / bounds.height - 0.5;
+        hero.style.setProperty("--mx", (x * 12).toFixed(2) + "px");
+        hero.style.setProperty("--my", (y * 10).toFixed(2) + "px");
+      });
+      hero.addEventListener("mouseleave", () => {
+        hero.style.setProperty("--mx", "0px");
+        hero.style.setProperty("--my", "0px");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<div class="sidebar-shell">
+  <header id="nav-header">
+    <div class="brand-wrap">
+      <div class="brand-mark"><i class="bx bx-bolt-circle"></i></div>
+      <div class="brand-copy">
+        <a id="nav-title" href="/" title="Torna al menu principale">Dynamica</a>
+        <p class="brand-subtitle">Circuit Studio</p>
+      </div>
+    </div>
+    <button id="sidebar-collapse-btn" class="collapse-toggle" type="button" aria-label="Collassa sidebar" aria-pressed="false">
+      <i class="bx bx-chevrons-left"></i>
+    </button>
+  </header>
+
+  <div id="nav-content">
+    <div class="nav-divider--labeled">
+      <span class="divider-text">Metodi di Analisi</span>
+    </div>
+
+    <div class="nav-button nav-button-direct">
+      <button id="open-analysis-page" class="nav-direct-action" type="button">
+        <span class="icon-pill"><i class="bx bx-bolt-circle"></i></span>
+        <span class="menu-item-label">Analizza</span>
+      </button>
+    </div>
+
+    <div class="nav-divider--labeled">
+      <span class="divider-text">Componenti</span>
+    </div>
+
+    <div class="nav-button expandable open">
+      <input id="expand-following" type="checkbox" class="nav-toggle-checkbox" checked />
+      <label class="expandable-header" for="expand-following">
+        <span class="icon-pill"><i class="bx bx-chip"></i></span>
+        <span class="menu-item-label">Dominio Elettrico</span>
+        <i class="bx bx-chevron-down expand-icon no-shake"></i>
+      </label>
+      <div class="submenu">
+        <div id="component-library-electrical"></div>
+      </div>
+    </div>
+
+    <div class="nav-divider-centered"></div>
+
+    <div class="nav-divider--labeled">
+      <span class="divider-text">File</span>
+    </div>
+
+    <div class="settings-grid export-grid">
+      <button id="import-circuit-btn" class="export-action" type="button">
+        <i class="bx bx-import"></i>
+        <span>Importa (Dummy)</span>
+      </button>
+      <button id="save-circuit-btn" class="export-action" type="button">
+        <i class="bx bx-save"></i>
+        <span>Salva (Dummy)</span>
+      </button>
+    </div>
+
+    <div class="nav-button expandable">
+      <input id="expand-export" type="checkbox" class="nav-toggle-checkbox" />
+      <label class="expandable-header" for="expand-export">
+        <span class="icon-pill"><i class="bx bx-export"></i></span>
+        <span class="menu-item-label">Esporta</span>
+        <i class="bx bx-chevron-down expand-icon no-shake"></i>
+      </label>
+      <div class="submenu">
+        <div class="settings-grid export-grid">
+          <button id="export-svg-btn" class="export-action" type="button">
+            <i class="bx bx-image"></i>
+            <span>Esporta SVG</span>
+          </button>
+          <button id="export-tex-btn" class="export-action" type="button">
+            <i class="bx bx-code-alt"></i>
+            <span>Esporta LaTeX</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-divider-centered"></div>
+
+    <div class="nav-button expandable">
+      <input id="expand-settings" type="checkbox" class="nav-toggle-checkbox" />
+      <label class="expandable-header" for="expand-settings">
+        <span class="icon-pill"><i class="bx bx-slider-alt"></i></span>
+        <span class="menu-item-label">Impostazioni</span>
+        <i class="bx bx-chevron-down expand-icon no-shake"></i>
+      </label>
+      <div class="submenu">
+        <div class="settings-grid">
+          <div class="nav-divider-labeled">
+            <span class="divider-text">Griglia</span>
+          </div>
+
+          <div class="setting-item">
+            <span>Griglia Attiva</span>
+            <label class="switch">
+              <input type="checkbox" id="grid-toggle" checked />
+              <span class="slider-grid"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <span>Dimensione Celle</span>
+            <input type="range" min="4" max="32" value="8" id="grid-cell-size" />
+          </div>
+
+          <div class="setting-item">
+            <span>Sottodivisioni</span>
+            <input type="range" min="1" max="10" value="5" id="grid-subdivision" />
+          </div>
+
+          <div class="nav-divider-labeled">
+            <span class="divider-text">Generali</span>
+          </div>
+
+          <div class="setting-item">
+            <span>Tema Scuro</span>
+            <label class="switch">
+              <input type="checkbox" id="theme-toggle" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <span>Lingua (Dummy)</span>
+            <button id="language-toggle-btn" class="setting-action-btn" type="button" aria-label="Cambia lingua dummy">
+              <img id="language-flag" class="language-flag" src="/flags/it.svg" alt="" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
