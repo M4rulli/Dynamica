@@ -46,34 +46,44 @@
       <span class="divider-text">File</span>
     </div>
 
-    <div class="settings-grid export-grid">
-      <button id="import-circuit-btn" class="export-action" type="button">
-        <i class="bx bx-import"></i>
-        <span>Importa (Dummy)</span>
-      </button>
-      <button id="save-circuit-btn" class="export-action" type="button">
-        <i class="bx bx-save"></i>
-        <span>Salva (Dummy)</span>
-      </button>
-    </div>
-
     <div class="nav-button expandable">
-      <input id="expand-export" type="checkbox" class="nav-toggle-checkbox" />
-      <label class="expandable-header" for="expand-export">
-        <span class="icon-pill"><i class="bx bx-export"></i></span>
-        <span class="menu-item-label">Esporta</span>
+      <input id="expand-file" type="checkbox" class="nav-toggle-checkbox" />
+      <label class="expandable-header" for="expand-file">
+        <span class="icon-pill"><i class="bx bx-folder-open"></i></span>
+        <span class="menu-item-label">File</span>
         <i class="bx bx-chevron-down expand-icon no-shake"></i>
       </label>
       <div class="submenu">
         <div class="settings-grid export-grid">
-          <button id="export-svg-btn" class="export-action" type="button">
-            <i class="bx bx-image"></i>
-            <span>Esporta SVG</span>
+          <button id="import-circuit-btn" class="export-action" type="button">
+            <i class="bx bx-import"></i>
+            <span>Importa (Dummy)</span>
           </button>
-          <button id="export-tex-btn" class="export-action" type="button">
-            <i class="bx bx-code-alt"></i>
-            <span>Esporta LaTeX</span>
+          <button id="save-circuit-btn" class="export-action" type="button">
+            <i class="bx bx-save"></i>
+            <span>Salva (Dummy)</span>
           </button>
+
+          <div class="nav-button expandable nav-button--inner">
+            <input id="expand-file-export" type="checkbox" class="nav-toggle-checkbox" />
+            <label class="expandable-header" for="expand-file-export">
+              <span class="icon-pill"><i class="bx bx-export"></i></span>
+              <span class="menu-item-label">Esporta</span>
+              <i class="bx bx-chevron-down expand-icon no-shake"></i>
+            </label>
+            <div class="submenu">
+              <div class="settings-grid export-grid">
+                <button id="export-svg-btn" class="export-action" type="button">
+                  <i class="bx bx-image"></i>
+                  <span>Esporta SVG</span>
+                </button>
+                <button id="export-tex-btn" class="export-action" type="button">
+                  <i class="bx bx-code-alt"></i>
+                  <span>Esporta LaTeX</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
