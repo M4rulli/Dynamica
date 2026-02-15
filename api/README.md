@@ -1,10 +1,18 @@
 # Dynamica Analysis API
 
-API FastAPI compatta per analisi circuitale (nodi/maglie) via JSON.
+FastAPI service for asynchronous circuit analysis (nodal and mesh workflows), consumed by the Dynamica web client.
 
-## Avvio rapido
+## Features
 
-1. Crea venv ed installa dipendenze:
+- Async job lifecycle (`queued -> running -> completed|failed`)
+- Circuit integrity validation before job execution
+- Nodal and mesh analysis dispatch
+- Symbolic solving via `lcapy` and `sympy`
+- In-memory job persistence for local/dev usage
+
+## Quick Start
+
+1. Create a virtual environment and install dependencies:
 
 ```bash
 cd api
@@ -13,30 +21,76 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. Avvia server:
+2. Start the API:
 
 ```bash
 uvicorn app.main:app --reload --port 8000
 ```
 
-API base:
+3. Verify health:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+## Endpoints
+
+Base URL: `http://127.0.0.1:8000`
+
+- `GET /health`
+  - Liveness probe.
 - `POST /api/v1/analysis/jobs`
+  - Creates an analysis job from an `AnalysisRequest`.
+  - Returns `job_id` and initial `queued` status.
 - `GET /api/v1/analysis/jobs/{job_id}`
+  - Returns current status and optional error.
 - `GET /api/v1/analysis/jobs/{job_id}/result`
+  - Returns status, optional final result, and optional error.
 
-## Struttura tecnica ridotta
+## Request/Response Model Summary
 
-- `app/main.py`: API + ciclo job asincrono
-- `app/models.py`: schemi request/response/componenti
-- `app/job_store.py`: storage job in-memory
-- `app/analysis_engine.py`: logica analisi
-  - validazione parametri componenti
-  - costruzione grafo + base maglie (visualizzazione)
-  - conversione circuito in netlist Lcapy
-  - risoluzione nodale/maglie con Lcapy
-  - correnti di ramo da base maglie per report
+Core schemas are defined in `app/models.py`:
 
-## Nota operativa
+- `AnalysisRequest`
+  - `analysis_type`: `"nodal"` or `"mesh"`
+  - `circuit.components`: normalized component list from the editor
+  - `options`: optional key-value settings
+- `AnalysisResultResponse`
+  - `status`: job status
+  - `result`: populated when completed
+  - `error`: populated when failed
 
-L'analisi viene bloccata se mancano parametri caratteristici dei bipoli (es. `R`, `L`, `C`, tensione/corrente nota del generatore).
-Il solver simbolico usato è Lcapy.
+## Project Structure
+
+- `app/main.py`
+  - FastAPI app, CORS, endpoint handlers, async job scheduling.
+- `app/analysis_engine.py`
+  - Validation, graph preparation, and high-level analysis orchestration.
+- `app/mesh_analysis.py`
+  - Mesh-analysis specific implementation details.
+- `app/analysis_common.py`
+  - Shared helpers across analysis paths.
+- `app/job_store.py`
+  - Thread-safe in-memory job store.
+- `app/models.py`
+  - Pydantic request/response/domain models.
+
+## Operational Notes
+
+- Circuits that fail integrity checks or miss required electrical parameters are rejected before execution.
+- The default job store is in-memory and resets on process restart.
+- Debug logging can be enabled with:
+
+```bash
+export ANALYSIS_DEBUG=1
+```
+
+## Dependencies
+
+Pinned in `requirements.txt`:
+
+- `fastapi`
+- `uvicorn`
+- `pydantic`
+- `lcapy`
+- `sympy`
