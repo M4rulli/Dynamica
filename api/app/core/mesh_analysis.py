@@ -10,8 +10,8 @@ This file contains the method-specific pipeline for loop analysis:
 
 import sympy as sp
 
-from app.models import AnalysisRequest, AnalysisResult
-from app.analysis_common import (
+from app.core.models import AnalysisRequest, AnalysisResult
+from app.core.analysis_common import (
   build_graph,
   build_graph_svg,
   find_tree_path,

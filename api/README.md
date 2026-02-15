@@ -39,6 +39,8 @@ Base URL: `http://127.0.0.1:8000`
 
 - `GET /health`
   - Liveness probe.
+- `GET /api/v1/health`
+  - Versioned liveness probe.
 - `POST /api/v1/analysis/jobs`
   - Creates an analysis job from an `AnalysisRequest`.
   - Returns `job_id` and initial `queued` status.
@@ -49,7 +51,7 @@ Base URL: `http://127.0.0.1:8000`
 
 ## Request/Response Model Summary
 
-Core schemas are defined in `app/models.py`:
+Core schemas are defined in `app/core/models.py`:
 
 - `AnalysisRequest`
   - `analysis_type`: `"nodal"` or `"mesh"`
@@ -63,16 +65,18 @@ Core schemas are defined in `app/models.py`:
 ## Project Structure
 
 - `app/main.py`
-  - FastAPI app, CORS, endpoint handlers, async job scheduling.
-- `app/analysis_engine.py`
+  - FastAPI app, CORS, health endpoints, and router registration.
+- `app/routes/analysis.py`
+  - Analysis job endpoints and async job scheduling.
+- `app/core/analysis_engine.py`
   - Validation, graph preparation, and high-level analysis orchestration.
-- `app/mesh_analysis.py`
+- `app/core/mesh_analysis.py`
   - Mesh-analysis specific implementation details.
-- `app/analysis_common.py`
+- `app/core/analysis_common.py`
   - Shared helpers across analysis paths.
-- `app/job_store.py`
+- `app/core/job_store.py`
   - Thread-safe in-memory job store.
-- `app/models.py`
+- `app/core/models.py`
   - Pydantic request/response/domain models.
 
 ## Operational Notes

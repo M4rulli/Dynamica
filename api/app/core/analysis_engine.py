@@ -17,7 +17,7 @@ import traceback
 import warnings
 import sympy as sp
 
-from app.models import AnalysisRequest, AnalysisResult, CircuitComponent
+from app.core.models import AnalysisRequest, AnalysisResult, CircuitComponent
 
 try:
   from lcapy import Circuit
@@ -889,7 +889,7 @@ def run_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
       raise ValueError(error or "Parametri non validi per analisi.")
 
   if payload.analysis_type == "mesh":
-    from app.mesh_analysis import run_mesh_analysis
+    from app.core.mesh_analysis import run_mesh_analysis
 
     result = run_mesh_analysis(job_id, payload)
     _dbg(f"run_analysis completed job={job_id} type=mesh")

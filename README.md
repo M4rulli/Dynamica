@@ -46,10 +46,11 @@ Professional circuit editor with a modern UI, SVG/LaTeX export, and asynchronous
 
 - Stack: `FastAPI + SymPy (+ Lcapy available in environment)`
 - API entrypoint: `api/app/main.py`
-- General orchestration: `api/app/analysis_engine.py`
-- Mesh-specific algorithm: `api/app/mesh_analysis.py`
-- Shared utilities: `api/app/analysis_common.py`
-- In-memory job store: `api/app/job_store.py`
+- Analysis routes: `api/app/routes/analysis.py`
+- General orchestration: `api/app/core/analysis_engine.py`
+- Mesh-specific algorithm: `api/app/core/mesh_analysis.py`
+- Shared utilities: `api/app/core/analysis_common.py`
+- In-memory job store: `api/app/core/job_store.py`
 
 ## Quick Start
 
@@ -122,12 +123,15 @@ Notes:
 ├─ config/                  # Build/TypeScript configuration
 ├─ api/
 │  ├─ app/
-│  │  ├─ main.py            # FastAPI endpoints + job lifecycle
-│  │  ├─ analysis_engine.py # General dispatcher and validation
-│  │  ├─ mesh_analysis.py   # Mesh analysis algorithm
-│  │  ├─ analysis_common.py # Shared graph/latex/svg helpers
-│  │  ├─ models.py          # Pydantic schemas
-│  │  └─ job_store.py       # In-memory job store
+│  │  ├─ main.py            # FastAPI app bootstrap + health
+│  │  ├─ routes/
+│  │  │  └─ analysis.py     # Analysis endpoints
+│  │  └─ core/
+│  │     ├─ analysis_engine.py # General dispatcher and validation
+│  │     ├─ mesh_analysis.py   # Mesh analysis algorithm
+│  │     ├─ analysis_common.py # Shared graph/latex/svg helpers
+│  │     ├─ models.py          # Pydantic schemas
+│  │     └─ job_store.py       # In-memory job store
 │  └─ requirements.txt
 └─ package.json
 ```

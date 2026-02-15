@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from threading import Lock
 
-from app.models import AnalysisRequest, AnalysisResult, JobStatus
+from app.core.models import AnalysisRequest, AnalysisResult, JobStatus
 
 
 @dataclass

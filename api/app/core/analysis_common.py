@@ -12,7 +12,7 @@ from collections import deque
 
 import sympy as sp
 
-from app.models import CircuitComponent
+from app.core.models import CircuitComponent
 
 
 def canonical_label(comp: CircuitComponent, index: int) -> str:
