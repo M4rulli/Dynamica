@@ -1,0 +1,17 @@
+:root {
+  --editor-ui-scale: 0.8;
+}
+
+@media (min-width: 960px) {
+  #nav-bar,
+  #Container,
+  #component-inspector,
+  #settings-panel {
+    zoom: var(--editor-ui-scale);
+  }
+
+  /* Keep sidebar visually scaled but full-height in viewport. */
+  #nav-bar {
+    height: calc((100vh - 40px) / var(--editor-ui-scale)) !important;
+  }
+}

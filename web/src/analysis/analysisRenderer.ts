@@ -1,5 +1,5 @@
 /**
- * Analysis result renderer for analysis.html.
+ * Analysis result renderer for pages/analysis.html.
  *
  * Renders graph/matrices, step-by-step equations, tabular electrical values,
  * and configures lightweight interactive graph manipulation for inspection.

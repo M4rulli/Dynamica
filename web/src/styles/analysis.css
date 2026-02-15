@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@600;700&display=swap");
 
 :root {
+  --app-ui-scale: 0.9;
   --analysis-bg: #091327;
   --analysis-panel: rgba(15, 27, 50, 0.9);
   --analysis-border: rgba(120, 169, 240, 0.24);
@@ -36,6 +37,12 @@ body {
 
 body.light-theme {
   background: radial-gradient(900px 600px at -15% -10%, rgba(91, 144, 228, 0.2), transparent 58%), linear-gradient(180deg, #f7fbff 0%, var(--analysis-bg) 100%);
+}
+
+@media (min-width: 960px) {
+  body {
+    min-height: calc(100vh / var(--app-ui-scale, 1));
+  }
 }
 
 .analysis-page,

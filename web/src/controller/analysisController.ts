@@ -1,7 +1,7 @@
 /**
  * Analysis entrypoint controller for the editor sidebar.
  *
- * The sidebar now exposes a single "Analizza" action that opens analysis.html.
+ * The sidebar now exposes a single "Analizza" action that opens pages/analysis.html.
  * We persist the current circuit snapshot so the analysis page can:
  * - recap the exact circuit,
  * - let the user choose domain/method,
@@ -236,6 +236,6 @@ export function loadAnalysisControls(): void {
       circuit: { components },
     };
     localStorage.setItem(ANALYSIS_DRAFT_KEY, JSON.stringify(snapshot));
-    window.open("/analysis.html", "_blank", "noopener,noreferrer");
+    window.open("/pages/analysis.html", "_blank", "noopener,noreferrer");
   });
 }

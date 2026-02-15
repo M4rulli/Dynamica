@@ -1,13 +1,13 @@
-# Dynamica Analysis Backend
+# Dynamica Analysis API
 
-Backend FastAPI compatto per analisi circuitale (nodi/maglie) via JSON.
+API FastAPI compatta per analisi circuitale (nodi/maglie) via JSON.
 
 ## Avvio rapido
 
 1. Crea venv ed installa dipendenze:
 
 ```bash
-cd backend
+cd api
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

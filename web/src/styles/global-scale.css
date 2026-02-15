@@ -1,0 +1,22 @@
+:root {
+  --app-ui-scale: 0.8;
+}
+
+@media (min-width: 960px) {
+  html {
+    zoom: var(--app-ui-scale);
+  }
+
+  @supports not (zoom: 1) {
+    html {
+      overflow-x: hidden;
+    }
+
+    body {
+      width: calc(100% / var(--app-ui-scale));
+      min-height: calc(100% / var(--app-ui-scale));
+      transform: scale(var(--app-ui-scale));
+      transform-origin: top left;
+    }
+  }
+}
