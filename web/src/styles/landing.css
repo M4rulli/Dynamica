@@ -85,7 +85,15 @@ body.landing-light .landing__stat {
 }
 
 body.landing-light .landing__cta {
-  color: #f5f9ff;
+  color: #ffffff;
+  border-color: rgba(20, 74, 134, 0.52);
+  background: linear-gradient(155deg, rgba(31, 106, 186, 0.96), rgba(38, 138, 207, 0.92));
+  box-shadow: 0 10px 22px rgba(25, 83, 147, 0.28);
+}
+
+body.landing-light .landing__cta:hover {
+  border-color: rgba(16, 62, 114, 0.75);
+  box-shadow: 0 14px 28px rgba(20, 70, 124, 0.34);
 }
 
 body.landing-light .landing__cta--ghost {
