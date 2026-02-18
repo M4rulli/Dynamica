@@ -12,7 +12,7 @@ import type {
 // Allow runtime override from embedding pages/tests; fallback to local backend.
 const API_BASE = (window as Window & { __analysisApiBase?: string }).__analysisApiBase ?? "http://127.0.0.1:8000/api/v1";
 
-/** Fetch current status for a queued/running/completed job. */
+/** Fetch current status for a queued/running/completed job.  */
 export async function getJobStatus(jobId: string): Promise<AnalysisJobStatusResponse> {
   const res = await fetch(`${API_BASE}/analysis/jobs/${jobId}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Status request failed: ${res.status}`);
