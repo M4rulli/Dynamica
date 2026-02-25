@@ -56,7 +56,16 @@ Professional circuit editor with a modern UI, SVG/LaTeX export, and asynchronous
 
 ## 1) Web
 
+macOS/Linux:
+
 ```bash
+npm install
+npm run dev
+```
+
+Windows CMD:
+
+```bat
 npm install
 npm run dev
 ```
@@ -65,13 +74,32 @@ Default dev URL: `http://127.0.0.1:5173`
 
 ## 2) API
 
+macOS/Linux (Unix):
+
 ```bash
 cd api
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --port 8000
 ```
+
+Windows CMD:
+
+```bat
+cd api
+py -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --port 8000
+```
+
+Note:
+- Avvio corretto API: `python -m uvicorn app.main:app --reload --port 8000`
+- Non usare `python app/main.py`.
+- Per uscire dalla virtualenv: `deactivate`
 
 Health check:
 
