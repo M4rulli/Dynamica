@@ -14,17 +14,30 @@ FastAPI service for asynchronous circuit analysis (nodal and mesh workflows), co
 
 1. Create a virtual environment and install dependencies:
 
+macOS/Linux (Unix):
+
 ```bash
 cd api
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Windows CMD:
+
+```bat
+cd api
+py -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 2. Start the API:
 
 ```bash
-uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8000
 ```
 
 3. Verify health:
@@ -32,6 +45,15 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 curl http://127.0.0.1:8000/health
 ```
+
+Notes:
+- Start the service with `uvicorn`, not with `python app/main.py`.
+- Exit virtualenv with `deactivate`.
+
+Troubleshooting:
+- `ModuleNotFoundError: No module named 'fastapi'`
+  - activate `.venv`
+  - run `python -m pip install -r requirements.txt`
 
 ## Endpoints
 

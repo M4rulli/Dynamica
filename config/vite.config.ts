@@ -7,9 +7,9 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        landing: "index.html",
-        editor: "pages/editor.html",
-        analysis: "pages/analysis.html",
+        landing: "/index.html",
+        editor: "/pages/editor.html",
+        analysis: "/pages/analysis.html",
       },
     },
   },
