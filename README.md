@@ -5,6 +5,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-D22128.svg)](LICENSE)
 
 Dynamica is a visual workspace for drawing and analyzing analog circuits. It
 keeps the schematic, component parameters, analysis setup, and results in one
@@ -110,3 +111,7 @@ Dynamica is under active development. The circuit editor, inspector, local
 session restore, export flow, and mesh/nodal analysis are implemented. File
 import and explicit save controls are currently placeholders, and analysis jobs
 are stored in memory by the API.
+
+## License
+
+Dynamica is available under the [Apache License 2.0](LICENSE).
