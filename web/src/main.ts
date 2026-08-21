@@ -12,6 +12,7 @@ import { loadComponentInspector } from "./controller/componentInspectorControlle
 import { setupGrid } from "./controller/previewController";
 import { setupKeyboardShortcuts } from "./controller/keyboardController";
 import { loadAnalysisControls } from "./controller/analysisController";
+import { initLocale } from "./i18n";
 
 const saved = localStorage.getItem("theme");
 document.body.classList.remove("dark-theme", "light-theme");
@@ -20,6 +21,8 @@ if (saved === "dark") {
 } else if (saved === "light") {
   document.body.classList.add("light-theme");
 }
+
+initLocale();
 
 window.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("canvas-container");

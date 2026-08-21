@@ -6,6 +6,7 @@
  */
 
 import type { AnalysisResult, JobStatus } from "./analysisTypes";
+import { t, translateJobStatus } from "../i18n";
 
 type GraphNode = {
   id: number;
@@ -213,12 +214,12 @@ function enableGraphEditing(graph: HTMLElement): void {
 export function renderStatus(status: JobStatus, error?: string | null): void {
   const statusPill = document.getElementById("analysis-status-pill");
   if (statusPill) {
-    statusPill.textContent = status;
+    statusPill.textContent = translateJobStatus(status);
   }
   const meta = document.getElementById("analysis-job-meta");
   if (error) {
     if (meta) {
-      meta.textContent = `Errore: ${error}`;
+      meta.textContent = t("analysis.errorPrefix", { error });
       meta.classList.add("analysis-meta--error");
     }
   } else if (meta) {
@@ -230,7 +231,7 @@ export function renderStatus(status: JobStatus, error?: string | null): void {
 export function renderMeta(jobId: string): void {
   const meta = document.getElementById("analysis-job-meta");
   if (meta) {
-    meta.textContent = `Job ID: ${jobId}`;
+    meta.textContent = t("analysis.jobId", { jobId });
     meta.classList.remove("analysis-meta--error");
   }
 }
@@ -262,32 +263,32 @@ export function renderResult(result: AnalysisResult): void {
 
   const matrixHtml = bMatrixLatex
     ? `<div class="analysis-matrix">
-         <div class="analysis-matrix-title">Matrice B (maglie-rami)</div>
+         <div class="analysis-matrix-title">${t("analysis.bMatrix")}</div>
          <div class="analysis-incidence-latex">\\[${bMatrixLatex}\\]</div>
        </div>`
     : "";
 
   const incidenceHtml = incidenceMatrixLatex
     ? `<div class="analysis-incidence-panel">
-         <div class="analysis-matrix-title">Matrice di Incidenza</div>
+         <div class="analysis-matrix-title">${t("analysis.incidenceMatrix")}</div>
          <div class="analysis-incidence-latex">\\[${incidenceMatrixLatex}\\]</div>
        </div>`
     : "";
 
   const graphBlock = graphSvg
     ? `<div class="analysis-graph-main">
-         <div class="analysis-matrix-title">Grafo</div>
+         <div class="analysis-matrix-title">${t("analysis.graph")}</div>
          <div class="analysis-graph-zoom">
            <div class="analysis-graph-svg"><div class="analysis-graph-viewport">${graphSvg}</div></div>
          </div>
        </div>`
-    : '<div class="analysis-graph-main"><div class="analysis-note-list">Grafo non disponibile.</div></div>';
+    : `<div class="analysis-graph-main"><div class="analysis-note-list">${t("analysis.graphUnavailable")}</div></div>`;
 
   graph.innerHTML = `
     ${graphBlock}
     <div class="analysis-matrix-grid">
-      <div class="analysis-matrix-card">${incidenceHtml || '<div class="analysis-note-list">Matrice di incidenza non disponibile.</div>'}</div>
-      <div class="analysis-matrix-card">${matrixHtml || '<div class="analysis-note-list">Matrice B non disponibile.</div>'}</div>
+      <div class="analysis-matrix-card">${incidenceHtml || `<div class="analysis-note-list">${t("analysis.incidenceUnavailable")}</div>`}</div>
+      <div class="analysis-matrix-card">${matrixHtml || `<div class="analysis-note-list">${t("analysis.bMatrixUnavailable")}</div>`}</div>
     </div>
   `;
 
@@ -352,7 +353,7 @@ export function renderResult(result: AnalysisResult): void {
   } else {
     latexEl.innerHTML = `\\(${result.latex}\\)`;
   }
-  powerBalance.innerHTML = powerBalanceLatex ? `\\[${powerBalanceLatex}\\]` : "\\[\\text{Bilancio non disponibile}\\]";
+  powerBalance.innerHTML = powerBalanceLatex ? `\\[${powerBalanceLatex}\\]` : `\\[\\text{${t("analysis.powerBalanceUnavailable")}}\\]`;
 
   if (powerRows.length > 0) {
     const tableRows = powerRows
@@ -364,13 +365,13 @@ export function renderResult(result: AnalysisResult): void {
     powerTable.innerHTML = `
       <table class="analysis-table">
         <thead>
-          <tr><th>Elemento</th><th>I</th><th>V</th><th>P</th></tr>
+          <tr><th>${t("analysis.powerTableElement")}</th><th>I</th><th>V</th><th>P</th></tr>
         </thead>
         <tbody>${tableRows}</tbody>
       </table>
     `;
   } else {
-    powerTable.innerHTML = `<div class="analysis-item"><strong>Nessun dato disponibile</strong></div>`;
+    powerTable.innerHTML = `<div class="analysis-item"><strong>${t("analysis.powerTableNoData")}</strong></div>`;
   }
 
   const mj = (window as Window & { MathJax?: { typesetPromise?: (nodes: Element[]) => Promise<void>; typeset?: (nodes: Element[]) => void } }).MathJax;

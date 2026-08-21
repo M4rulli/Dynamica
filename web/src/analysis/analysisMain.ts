@@ -6,6 +6,7 @@
 
 import { createJob, getJobResult, getJobStatus } from "./analysisApi";
 import { renderMeta, renderResult, renderStatus } from "./analysisRenderer";
+import { applyTranslations, getLocale, initLocale, t, translateComponentType } from "../i18n";
 
 type AnalysisType = "nodal" | "mesh";
 
@@ -91,8 +92,8 @@ function renderCircuitSummary(components: ComponentInstance[]): void {
   if (components.length === 0) {
     target.innerHTML = `
       <div class="analysis-item">
-        <span>Stato</span>
-        <strong>Nessun circuito disponibile. Torna all'editor e premi "Analizza".</strong>
+        <span>${t("analysis.summaryStatus")}</span>
+        <strong>${t("analysis.summaryNoCircuit")}</strong>
       </div>
     `;
     return;
@@ -103,11 +104,11 @@ function renderCircuitSummary(components: ComponentInstance[]): void {
     byType.set(c.type, (byType.get(c.type) ?? 0) + 1);
   });
   const typeRows = Array.from(byType.entries())
-    .map(([type, qty]) => `<div class="analysis-item"><span>${type}</span><strong>${qty}</strong></div>`)
+    .map(([type, qty]) => `<div class="analysis-item"><span>${translateComponentType(type)}</span><strong>${qty}</strong></div>`)
     .join("");
 
   target.innerHTML = `
-    <div class="analysis-item"><span>Componenti Totali</span><strong>${components.length}</strong></div>
+    <div class="analysis-item"><span>${t("analysis.summaryTotalComponents")}</span><strong>${components.length}</strong></div>
     ${typeRows}
   `;
 }
@@ -118,6 +119,7 @@ function collectOptions(): Record<string, string | boolean> {
   const regimeInput = document.querySelector<HTMLInputElement>('input[name="analysis-regime"]:checked');
   const laplaceClassic = document.getElementById("analysis-laplace-classic") as HTMLInputElement | null;
   return {
+    locale: getLocale(),
     domain: domainInput?.value ?? "time",
     regime: regimeInput?.value ?? "dc",
     laplace_classic: !!laplaceClassic?.checked,
@@ -152,7 +154,7 @@ function clearAnalysisOutputs(): void {
 function setIdleStatus(): void {
   const pill = document.getElementById("analysis-status-pill");
   const meta = document.getElementById("analysis-job-meta");
-  if (pill) pill.textContent = "In attesa";
+  if (pill) pill.textContent = t("analysis.statusIdle");
   if (meta) {
     meta.textContent = "";
     meta.classList.remove("analysis-meta--error");
@@ -195,7 +197,7 @@ async function poll(jobId: string, token: number): Promise<void> {
 async function runFromDraft(analysisType: AnalysisType): Promise<void> {
   const components = normalizeComponentsForAnalysis(readDraftComponents());
   if (components.length === 0) {
-    renderStatus("failed", "Circuito mancante: apri l'editor e premi Analizza.");
+    renderStatus("failed", t("analysis.missingCircuit"));
     return;
   }
 
@@ -223,14 +225,14 @@ function bindRunButtons(): void {
   if (nodalBtn) {
     nodalBtn.addEventListener("click", () => {
       void runFromDraft("nodal").catch((err) => {
-        renderStatus("failed", err instanceof Error ? err.message : "Errore durante analisi nodale");
+        renderStatus("failed", err instanceof Error ? err.message : t("analysis.nodalError"));
       });
     });
   }
   if (meshBtn) {
     meshBtn.addEventListener("click", () => {
       void runFromDraft("mesh").catch((err) => {
-        renderStatus("failed", err instanceof Error ? err.message : "Errore durante analisi a maglie");
+        renderStatus("failed", err instanceof Error ? err.message : t("analysis.meshError"));
       });
     });
   }
@@ -288,6 +290,8 @@ function bindHelpModal(): void {
 
 /** Page entrypoint: restore state, bind controls, and optionally resume polling. */
 window.addEventListener("DOMContentLoaded", () => {
+  initLocale();
+  applyTranslations(document);
   applySavedTheme();
   const components = readDraftComponents();
   renderCircuitSummary(components);
@@ -304,6 +308,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const pollToken = activePollToken;
   setAnalysisResultsVisible(true);
   void poll(jobId, pollToken).catch((err) => {
-    renderStatus("failed", err instanceof Error ? err.message : "Errore inatteso");
+    renderStatus("failed", err instanceof Error ? err.message : t("analysis.unexpectedError"));
   });
 });

@@ -6,6 +6,7 @@
  */
 
 import type { ComponentInstance } from "../circuit-library/componentsInstance";
+import { applyTranslations, onLocaleChange, t, translateComponentType } from "../i18n";
 
 type InspectorEventDetail = { component: ComponentInstance | null };
 
@@ -15,12 +16,7 @@ type CanvasApi = {
 };
 
 function normalizeTypeLabel(type: string): string {
-  if (type === "resistor") return "Resistore";
-  if (type === "capacitor") return "Condensatore";
-  if (type === "inductor") return "Induttore";
-  if (type === "voltage_source") return "Generatore di Tensione";
-  if (type === "current_source") return "Generatore di Corrente";
-  return type;
+  return translateComponentType(type);
 }
 
 function isInspectableComponent(comp: ComponentInstance | null): comp is ComponentInstance {
@@ -60,6 +56,7 @@ export async function loadComponentInspector() {
   if (!mount) return;
 
   mount.innerHTML = html;
+  applyTranslations(mount);
 
   const panelRoot = document.getElementById("component-inspector");
   const collapseButton = document.getElementById("component-inspector-toggle") as HTMLButtonElement | null;
@@ -131,7 +128,7 @@ export async function loadComponentInspector() {
     if (!isInspectableComponent(comp)) {
       currentComponentId = null;
       currentComponentType = null;
-      typeEl.textContent = "Nessuna selezione";
+      typeEl.textContent = t("inspector.noneSelected");
       formEl.hidden = true;
       return;
     }
@@ -143,7 +140,7 @@ export async function loadComponentInspector() {
     const isCurrentSource = comp.type === "current_source";
     const sourceType = isVoltageSource || isCurrentSource;
 
-    valueLabel.textContent = "Valore";
+    valueLabel.textContent = t("inspector.value");
     unitEl.textContent = getUnitByType(comp.type);
     valueField.hidden = sourceType;
     valueField.style.display = sourceType ? "none" : "";
@@ -286,6 +283,12 @@ export async function loadComponentInspector() {
   window.addEventListener("canvas-selection-change", (evt) => {
     const detail = (evt as CustomEvent<InspectorEventDetail>).detail;
     renderComponent(detail?.component ?? null);
+  });
+
+  onLocaleChange(() => {
+    applyTranslations(mount);
+    const controller = (window as Window & { canvasController?: CanvasApi }).canvasController;
+    renderComponent(currentComponentId ? controller?.getComponentById?.(currentComponentId) ?? null : null);
   });
 
   const initialController = (window as Window & { canvasController?: CanvasApi }).canvasController;

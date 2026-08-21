@@ -6,6 +6,7 @@ import uuid
 from fastapi import APIRouter, HTTPException
 
 from app.core.analysis_engine import run_analysis, validate_circuit_integrity
+from app.core.i18n import locale_from_options, tr
 from app.core.job_store import AnalysisJob, job_store
 from app.core.models import (
   AnalysisJobCreateResponse,
@@ -61,9 +62,10 @@ async def _process_job(job_id: str) -> None:
 async def create_analysis_job(payload: AnalysisRequest) -> AnalysisJobCreateResponse:
   """Create an analysis job after a fast structural integrity check."""
   _debug_payload(payload)
-  ok, error = validate_circuit_integrity(payload.circuit.components)
+  locale = locale_from_options(payload.options)
+  ok, error = validate_circuit_integrity(payload.circuit.components, locale=locale)
   if not ok:
-    raise HTTPException(status_code=422, detail=error or "Errore di integrita' del circuito")
+    raise HTTPException(status_code=422, detail=error or tr(locale, "errors.integrity_generic"))
   job_id = str(uuid.uuid4())
   job_store.create(AnalysisJob(id=job_id, request=payload))
   asyncio.create_task(_process_job(job_id))
@@ -71,16 +73,16 @@ async def create_analysis_job(payload: AnalysisRequest) -> AnalysisJobCreateResp
 
 
 @router.get("/jobs/{job_id}", response_model=AnalysisJobStatusResponse)
-async def get_analysis_job_status(job_id: str) -> AnalysisJobStatusResponse:
+async def get_analysis_job_status(job_id: str, locale: str | None = None) -> AnalysisJobStatusResponse:
   job = job_store.get(job_id)
   if not job:
-    raise HTTPException(status_code=404, detail="Job non trovato")
+    raise HTTPException(status_code=404, detail=tr("en" if locale == "en" else "it", "errors.job_not_found"))
   return AnalysisJobStatusResponse(job_id=job.id, status=job.status, error=job.error)
 
 
 @router.get("/jobs/{job_id}/result", response_model=AnalysisResultResponse)
-async def get_analysis_result(job_id: str) -> AnalysisResultResponse:
+async def get_analysis_result(job_id: str, locale: str | None = None) -> AnalysisResultResponse:
   job = job_store.get(job_id)
   if not job:
-    raise HTTPException(status_code=404, detail="Job non trovato")
+    raise HTTPException(status_code=404, detail=tr("en" if locale == "en" else "it", "errors.job_not_found"))
   return AnalysisResultResponse(status=job.status, result=job.result, error=job.error)

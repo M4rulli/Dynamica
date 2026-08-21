@@ -17,6 +17,7 @@ import traceback
 import warnings
 import sympy as sp
 
+from app.core.i18n import locale_from_options, tr
 from app.core.models import AnalysisRequest, AnalysisResult, CircuitComponent
 
 try:
@@ -63,9 +64,9 @@ def _patch_lcapy_select_iteration_bug() -> None:
 _patch_lcapy_select_iteration_bug()
 
 
-def validate_circuit_integrity(components: list[CircuitComponent]) -> tuple[bool, str | None]:
+def validate_circuit_integrity(components: list[CircuitComponent], locale: str = "it") -> tuple[bool, str | None]:
   if len(components) == 0:
-    return False, "Circuito vuoto: aggiungi almeno un componente."
+    return False, tr(locale, "errors.empty_circuit")
 
   tolerance = 8.0
   tolerance2 = tolerance * tolerance
@@ -101,7 +102,7 @@ def validate_circuit_integrity(components: list[CircuitComponent]) -> tuple[bool
   if dangling_components:
     names = ", ".join(dangling_components[:4])
     suffix = "..." if len(dangling_components) > 4 else ""
-    return False, f"Errore di integrita': componenti/rami scoperti ({names}{suffix})."
+    return False, tr(locale, "errors.dangling", names=names, suffix=suffix)
 
   adjacency: list[set[int]] = [set() for _ in components]
   for comp_ids in cluster_components.values():
@@ -125,7 +126,7 @@ def validate_circuit_integrity(components: list[CircuitComponent]) -> tuple[bool
       q.append(nxt)
 
   if len(visited) != len(components):
-    return False, "Errore di integrita': il circuito non e' completamente interconnesso."
+    return False, tr(locale, "errors.disconnected")
 
   return True, None
 
@@ -141,22 +142,22 @@ def _safe_symbol(base: str, fallback: str) -> str:
   return cleaned or fallback
 
 
-def _component_param_ok(comp: CircuitComponent, analysis_type: str) -> tuple[bool, str | None]:
+def _component_param_ok(comp: CircuitComponent, analysis_type: str, locale: str = "it") -> tuple[bool, str | None]:
   if comp.type in ("wire",):
     return True, None
   if comp.type in ("resistor", "capacitor", "inductor"):
     if not (comp.value and comp.value.strip()):
-      return False, f"Parametro mancante per {comp.type} ({comp.id})"
+      return False, tr(locale, "errors.missing_param", component_type=comp.type, component_id=comp.id)
     return True, None
   if comp.type == "voltage_source":
     if comp.voltageUnknown is True or not (comp.voltage and comp.voltage.strip()):
-      return False, f"Tensione del generatore non nota ({comp.id})"
+      return False, tr(locale, "errors.unknown_voltage_source", component_id=comp.id)
     return True, None
   if comp.type == "current_source":
     if comp.currentUnknown is True or not (comp.current and comp.current.strip()):
-      return False, f"Corrente del generatore non nota ({comp.id})"
+      return False, tr(locale, "errors.unknown_current_source", component_id=comp.id)
     return True, None
-  return False, f"Tipo componente non supportato ({comp.id})"
+  return False, tr(locale, "errors.unsupported_component", component_id=comp.id)
 
 
 def _build_graph(components: list[CircuitComponent]) -> tuple[list[str], list[dict[str, str]]]:
@@ -386,13 +387,13 @@ def _edge_value(comp: CircuitComponent) -> str:
   return ""
 
 
-def _build_lcapy_netlist(edges: list[dict[str, str]], components: list[CircuitComponent]) -> str:
+def _build_lcapy_netlist(edges: list[dict[str, str]], components: list[CircuitComponent], locale: str = "it") -> str:
   lines: list[str] = []
   for idx, edge in enumerate(edges):
     comp = components[int(edge["comp_idx"])]
     value = _edge_value(comp)
     if value == "":
-      raise ValueError(f"Valore non valido per {edge['label']}")
+      raise ValueError(tr(locale, "errors.invalid_value", label=edge["label"]))
     name = _net_name(comp, edge["label"], idx)
     lines.append(f"{name} {edge['a']} {edge['b']} {value}")
   return "\n".join(lines)
@@ -797,14 +798,15 @@ def _run_mesh(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
 
 
 def _run_nodal(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
+  locale = locale_from_options(payload.options)
   components = payload.circuit.components
   nodes, edges = _build_graph(components)
   if len(edges) == 0:
-    raise ValueError("Dopo contrazione dei fili non restano bipoli analizzabili.")
+    raise ValueError(tr(locale, "errors.no_analyzable_bipoles"))
   if Circuit is None:
-    raise ValueError("Lcapy non installato. Esegui: pip install lcapy")
+    raise ValueError(tr(locale, "errors.lcapy_missing"))
 
-  netlist = _build_lcapy_netlist(edges, components)
+  netlist = _build_lcapy_netlist(edges, components, locale=locale)
   # In nodale serve un riferimento: usiamo il primo nodo come massa.
   ref_node = edges[0]["a"]
   netlist = _set_reference_node(netlist, ref_node)
@@ -833,7 +835,7 @@ def _run_nodal(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
     equations = [str(nodal)]
   latex = (
     "\\begin{aligned}\n"
-    "\\textbf{Analisi nodale (Lcapy)}\\\\\n"
+    "\\textbf{" + tr(locale, "analysis.nodal_title") + "}\\\\\n"
     "\\text{Netlist ridotta: }\\texttt{"
     + netlist.replace("\n", "\\\\")
     + "}\\\\[6pt]\n"
@@ -847,7 +849,7 @@ def _run_nodal(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
     latex=latex,
     equations=equations,
     summary={
-      "message": "Analisi nodale completata",
+      "message": tr(locale, "analysis.nodal_completed"),
       "components": len(components),
       "nodes": len(nodes),
     },
@@ -865,6 +867,7 @@ def _run_nodal(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
 def run_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
   """Validate payload and dispatch to the selected analysis algorithm."""
   _dbg(f"run_analysis start job={job_id} type={payload.analysis_type} components={len(payload.circuit.components)}")
+  locale = locale_from_options(payload.options)
   components = payload.circuit.components
   for idx, comp in enumerate(components):
     _dbg(
@@ -877,16 +880,16 @@ def run_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
       + f"sourceDirection={comp.sourceDirection} sourcePolarity={comp.sourcePolarity}"
     )
   if len(components) == 0:
-    raise ValueError("Circuito vuoto: impossibile eseguire analisi.")
+    raise ValueError(tr(locale, "errors.run_empty_circuit"))
 
-  is_integrity_ok, integrity_error = validate_circuit_integrity(components)
+  is_integrity_ok, integrity_error = validate_circuit_integrity(components, locale=locale)
   if not is_integrity_ok:
-    raise ValueError(integrity_error or "Errore di integrita' del circuito.")
+    raise ValueError(integrity_error or tr(locale, "errors.integrity_generic"))
 
   for comp in components:
-    ok, error = _component_param_ok(comp, payload.analysis_type)
+    ok, error = _component_param_ok(comp, payload.analysis_type, locale=locale)
     if not ok:
-      raise ValueError(error or "Parametri non validi per analisi.")
+      raise ValueError(error or tr(locale, "errors.invalid_analysis_params"))
 
   if payload.analysis_type == "mesh":
     from app.core.mesh_analysis import run_mesh_analysis

@@ -9,6 +9,7 @@
 
 import { loadSettingsPanel } from "./settingsController";
 import { bindExportControls } from "./exportController";
+import { applyTranslations, getLocale, setLocale, t } from "../i18n";
 
 function bindExpandableMenus(): void {
   document.querySelectorAll<HTMLInputElement>(".nav-toggle-checkbox").forEach((input) => {
@@ -139,25 +140,25 @@ function bindDummyFileActions(): void {
   }
 }
 
-function bindDummyLanguageToggle(): void {
+function bindLanguageToggle(): void {
   const toggleBtn = document.getElementById("language-toggle-btn") as HTMLButtonElement | null;
   const flag = document.getElementById("language-flag") as HTMLImageElement | null;
   if (!toggleBtn || !flag) return;
 
-  const STORAGE_KEY = "ui-language-dummy";
   const applyFlag = (lang: "it" | "en") => {
     flag.src = lang === "it" ? "/flags/it.svg" : "/flags/gb.svg";
-    toggleBtn.setAttribute("aria-label", lang === "it" ? "Lingua selezionata Italiano (dummy)" : "Lingua selezionata English (dummy)");
+    toggleBtn.setAttribute("aria-label", t("nav.languageCurrent", {
+      language: lang === "it" ? t("nav.languageNameIt") : t("nav.languageNameEn"),
+    }));
   };
 
-  const saved = localStorage.getItem(STORAGE_KEY);
-  const initial: "it" | "en" = saved === "en" ? "en" : "it";
+  const initial = getLocale();
   applyFlag(initial);
 
   toggleBtn.addEventListener("click", () => {
-    const current = localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "it";
+    const current = getLocale();
     const next: "it" | "en" = current === "it" ? "en" : "it";
-    localStorage.setItem(STORAGE_KEY, next);
+    setLocale(next);
     applyFlag(next);
   });
 }
@@ -169,11 +170,13 @@ export async function loadNavbar() {
   if (!target) return;
 
   target.innerHTML = html;
+  applyTranslations(target);
 
   const electricalTarget = document.getElementById("component-library-electrical");
   if (electricalTarget) {
     const gridRes = await fetch("/static/grid.html");
     electricalTarget.innerHTML = await gridRes.text();
+    applyTranslations(electricalTarget);
   }
 
   bindSidebarCollapseToggle();
@@ -181,7 +184,7 @@ export async function loadNavbar() {
   bindGridControls();
   bindExportControls();
   bindDummyFileActions();
-  bindDummyLanguageToggle();
+  bindLanguageToggle();
 
   const expandSettingsInput = document.getElementById("expand-settings") as HTMLInputElement | null;
   if (expandSettingsInput) {

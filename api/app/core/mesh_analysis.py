@@ -10,6 +10,7 @@ This file contains the method-specific pipeline for loop analysis:
 
 import sympy as sp
 
+from app.core.i18n import locale_from_options, tr
 from app.core.models import AnalysisRequest, AnalysisResult
 from app.core.analysis_common import (
   build_graph,
@@ -25,14 +26,15 @@ from app.core.analysis_common import (
 
 def run_mesh_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
   """Run full mesh analysis and return a normalized `AnalysisResult` payload."""
+  locale = locale_from_options(payload.options)
   components = payload.circuit.components
   nodes, edges = build_graph(components)
   if len(edges) == 0:
-    raise ValueError("Dopo contrazione dei fili non restano bipoli analizzabili.")
+    raise ValueError(tr(locale, "errors.no_analyzable_bipoles"))
 
   tree, cotree = tree_cotree(edges)
   if len(cotree) == 0:
-    raise ValueError("Nessuna maglia fondamentale trovata (grafo senza coalbero).")
+    raise ValueError(tr(locale, "errors.no_fundamental_mesh"))
 
   mesh_syms = [sp.Symbol(f"I_{i+1}") for i in range(len(cotree))]
   mesh_currents = [str(s) for s in mesh_syms]
@@ -120,7 +122,7 @@ def run_mesh_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
   unknowns: list[sp.Symbol] = mesh_syms + list(aux_voltage_symbols.values())
   all_exprs = kvl_exprs + constraints
   if len(all_exprs) == 0:
-    raise ValueError("Nessuna equazione disponibile per il metodo alle maglie.")
+    raise ValueError(tr(locale, "errors.no_fundamental_mesh"))
 
   eq_latex = [latex_eq(e, 0) for e in all_exprs]
   A, b = sp.linear_eq_to_matrix(all_exprs, unknowns)
@@ -192,39 +194,39 @@ def run_mesh_analysis(job_id: str, payload: AnalysisRequest) -> AnalysisResult:
     entering = None
     exiting = None
   is_balanced = bool(power_unknown_count == 0 and sp.simplify(total_power) == 0)
-  balance_phrase = "\\text{Il circuito " + ("e' energeticamente bilanciato" if is_balanced else "non e' energeticamente bilanciato") + "}"
+  balance_phrase = "\\text{" + tr(locale, "analysis.mesh_balance_ok" if is_balanced else "analysis.mesh_balance_not_ok") + "}"
   p_balance_latex = (
     "\\sum P_{entrante}=" + (sp.latex(entering) + "\\,\\mathrm{W}" if entering is not None else "\\text{n/d}") + ",\\quad "
     + "\\sum P_{uscente}=" + (sp.latex(exiting) + "\\,\\mathrm{W}" if exiting is not None else "\\text{n/d}") + ",\\quad "
     + "\\sum P=" + sp.latex(total_power) + "\\,\\mathrm{W},\\quad "
     + balance_phrase
-    + ("\\quad\\text{(attenzione: presenti }" + str(power_unknown_count) + "\\text{ potenze ignote)}" if power_unknown_count > 0 else "")
+    + ("\\quad\\text{(" + tr(locale, "analysis.mesh_unknown_powers", count=power_unknown_count) + ")}" if power_unknown_count > 0 else "")
   )
 
   matrix_latex = sp.latex(A) + "\\cdot" + sp.latex(sp.Matrix(unknowns)) + "=" + sp.latex(b)
   solution_latex = [latex_eq(u, sol_map[u]) for u in unknowns if u in sol_map]
   analysis_steps = [
-    "1) Costruzione equazione di maglia (LKT)||" + "\\\\\n".join([latex_eq(e, 0) for e in kvl_exprs]).replace("\\\\\n", "%%"),
-    "2) Vincoli generatori di corrente / supermaglie||" + ("\\\\\n".join([latex_eq(e, 0) for e in constraints]).replace("\\\\\n", "%%") if constraints else "\\text{Nessun vincolo}"),
-    "3) Forma matriciale||" + matrix_latex,
-    "4) Risoluzione del sistema||" + ("\\\\\n".join(solution_latex).replace("\\\\\n", "%%") if solution_latex else "\\text{Nessuna soluzione}"),
-    "5) Correnti di ramo||" + ("\\\\\n".join(branch_relations_latex).replace("\\\\\n", "%%") if branch_relations_latex else "\\text{Nessuna relazione}"),
+    tr(locale, "analysis.mesh_step_1") + "||" + "\\\\\n".join([latex_eq(e, 0) for e in kvl_exprs]).replace("\\\\\n", "%%"),
+    tr(locale, "analysis.mesh_step_2") + "||" + ("\\\\\n".join([latex_eq(e, 0) for e in constraints]).replace("\\\\\n", "%%") if constraints else "\\text{" + tr(locale, "analysis.mesh_no_constraints") + "}"),
+    tr(locale, "analysis.mesh_step_3") + "||" + matrix_latex,
+    tr(locale, "analysis.mesh_step_4") + "||" + ("\\\\\n".join(solution_latex).replace("\\\\\n", "%%") if solution_latex else "\\text{" + tr(locale, "analysis.mesh_no_solution") + "}"),
+    tr(locale, "analysis.mesh_step_5") + "||" + ("\\\\\n".join(branch_relations_latex).replace("\\\\\n", "%%") if branch_relations_latex else "\\text{" + tr(locale, "analysis.mesh_no_relation") + "}"),
   ]
 
   graph_notes = [
-    f"Maglie fondamentali: {len(cotree)}",
-    f"Vincoli da generatori di corrente: {len(constraints)}",
-    f"Supermaglie rilevate: {supermesh_count}",
-    "I versi di maglia sono assegnati automaticamente.",
+    tr(locale, "analysis.mesh_graph_note_fundamental", count=len(cotree)),
+    tr(locale, "analysis.mesh_graph_note_constraints", count=len(constraints)),
+    tr(locale, "analysis.mesh_graph_note_supermeshes", count=supermesh_count),
+    tr(locale, "analysis.mesh_graph_note_auto"),
   ]
 
   return AnalysisResult(
     job_id=job_id,
     analysis_type="mesh",
-    latex="\\text{Output generato da mesh\\_analysis.py}",
+    latex="\\text{" + tr(locale, "analysis.mesh_output").replace("_", "\\_") + "}",
     equations=eq_latex,
     summary={
-      "message": "Analisi alle maglie completata",
+      "message": tr(locale, "analysis.mesh_completed"),
       "components": len(components),
       "fundamental_loops": len(cotree),
       "constraints": len(constraints),

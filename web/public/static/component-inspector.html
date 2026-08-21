@@ -1,49 +1,49 @@
 <div id="component-inspector-panel" class="component-inspector">
-  <button id="component-inspector-toggle" class="component-inspector__handle" type="button" aria-label="Mostra o nascondi inspector" aria-pressed="false">
+  <button id="component-inspector-toggle" class="component-inspector__handle" type="button" aria-label="Mostra o nascondi inspector" aria-pressed="false" data-i18n-attr="aria-label:inspector.toggle">
     <i class="bx bx-chevrons-right"></i>
   </button>
 
   <div class="component-inspector__content">
     <div class="component-inspector__header">
-      <h3>Inspector</h3>
-      <span id="inspector-type" class="component-inspector__type">Nessuna selezione</span>
+      <h3 data-i18n="inspector.title">Inspector</h3>
+      <span id="inspector-type" class="component-inspector__type" data-i18n="inspector.noneSelected">Nessuna selezione</span>
     </div>
 
     <form id="inspector-form" class="component-inspector__form" hidden>
       <label class="component-inspector__field">
-        <span>Etichetta</span>
+        <span data-i18n="inspector.label">Etichetta</span>
         <input id="inspector-label" type="text" autocomplete="off" spellcheck="false" />
       </label>
 
       <label id="inspector-value-field" class="component-inspector__field">
-        <span id="inspector-value-label">Valore</span>
+        <span id="inspector-value-label" data-i18n="inspector.value">Valore</span>
         <div class="component-inspector__value-wrap">
-          <input id="inspector-value" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 300" />
+          <input id="inspector-value" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 300" data-i18n-attr="placeholder:inspector.valuePlaceholder" />
           <span id="inspector-unit" class="component-inspector__unit">Ω</span>
         </div>
       </label>
 
       <label id="inspector-current-field" class="component-inspector__field">
-        <span>Corrente</span>
+        <span data-i18n="inspector.current">Corrente</span>
         <div class="component-inspector__value-wrap">
-          <input id="inspector-current" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 1.2" />
+          <input id="inspector-current" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 1.2" data-i18n-attr="placeholder:inspector.currentPlaceholder" />
           <span class="component-inspector__unit">A</span>
         </div>
         <label class="component-inspector__check">
           <input id="inspector-current-unknown" type="checkbox" checked />
-          <span>Corrente incognita</span>
+          <span data-i18n="inspector.currentUnknown">Corrente incognita</span>
         </label>
       </label>
 
       <label id="inspector-voltage-field" class="component-inspector__field">
-        <span>Tensione</span>
+        <span data-i18n="inspector.voltage">Tensione</span>
         <div class="component-inspector__value-wrap">
-          <input id="inspector-voltage" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 12" />
+          <input id="inspector-voltage" type="text" autocomplete="off" inputmode="decimal" placeholder="es. 12" data-i18n-attr="placeholder:inspector.voltagePlaceholder" />
           <span class="component-inspector__unit">V</span>
         </div>
         <label class="component-inspector__check">
           <input id="inspector-voltage-unknown" type="checkbox" checked />
-          <span>Tensione incognita</span>
+          <span data-i18n="inspector.voltageUnknown">Tensione incognita</span>
         </label>
       </label>
 

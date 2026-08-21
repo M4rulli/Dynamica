@@ -8,6 +8,8 @@
  * - run backend analysis from there.
  */
 
+import { t, translateComponentType } from "../i18n";
+
 type ComponentInstance = {
   id: string;
   type: string;
@@ -39,7 +41,7 @@ function getCanvasComponents(): ComponentInstance[] {
 function canonicalLabel(comp: ComponentInstance, index: number): string {
   const label = comp.label?.trim();
   if (label) return label;
-  return `${comp.type.toUpperCase()}_${index + 1}`;
+  return `${translateComponentType(comp.type)} ${index + 1}`;
 }
 
 function getMissingParamReason(comp: ComponentInstance): string | null {
@@ -47,17 +49,17 @@ function getMissingParamReason(comp: ComponentInstance): string | null {
 
   if (comp.type === "resistor" || comp.type === "capacitor" || comp.type === "inductor") {
     const hasValue = typeof comp.value === "string" && comp.value.trim() !== "";
-    return hasValue ? null : "valore";
+    return hasValue ? null : t("errors.reason.value");
   }
 
   if (comp.type === "voltage_source") {
     const hasVoltage = typeof comp.voltage === "string" && comp.voltage.trim() !== "";
-    return comp.voltageUnknown === true || !hasVoltage ? "tensione" : null;
+    return comp.voltageUnknown === true || !hasVoltage ? t("errors.reason.voltage") : null;
   }
 
   if (comp.type === "current_source") {
     const hasCurrent = typeof comp.current === "string" && comp.current.trim() !== "";
-    return comp.currentUnknown === true || !hasCurrent ? "corrente" : null;
+    return comp.currentUnknown === true || !hasCurrent ? t("errors.reason.current") : null;
   }
 
   return null;
@@ -76,12 +78,12 @@ function validateComponentParams(components: ComponentInstance[]): { ok: true } 
 
   const preview = missing.slice(0, 4).join(", ");
   const suffix = missing.length > 4 ? "..." : "";
-  return { ok: false, error: `Errore parametro mancante: ${preview}${suffix}.` };
+  return { ok: false, error: t("errors.missingParam", { preview, suffix }) };
 }
 
 function validateCircuitIntegrity(components: ComponentInstance[]): { ok: true } | { ok: false; error: string } {
   if (components.length === 0) {
-    return { ok: false, error: "Circuito vuoto: aggiungi almeno un componente." };
+    return { ok: false, error: t("errors.emptyCircuit") };
   }
 
   const tolerance2 = CLUSTER_TOLERANCE * CLUSTER_TOLERANCE;
@@ -133,7 +135,7 @@ function validateCircuitIntegrity(components: ComponentInstance[]): { ok: true }
   if (danglingComponents.length > 0) {
     const preview = danglingComponents.slice(0, 4).join(", ");
     const suffix = danglingComponents.length > 4 ? "..." : "";
-    return { ok: false, error: `Errore di integrità: componenti/rami scoperti (${preview}${suffix}).` };
+    return { ok: false, error: t("errors.integrityDangling", { preview, suffix }) };
   }
 
   const adjacency = components.map(() => new Set<number>());
@@ -161,7 +163,7 @@ function validateCircuitIntegrity(components: ComponentInstance[]): { ok: true }
   }
 
   if (visited.size !== components.length) {
-    return { ok: false, error: "Errore di integrità: il circuito non è completamente interconnesso." };
+    return { ok: false, error: t("errors.integrityDisconnected") };
   }
 
   return { ok: true };

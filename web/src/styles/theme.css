@@ -47,15 +47,6 @@ body.dark-theme .nav-button:hover {
   background-color: rgba(255, 255, 255, 0.06); /* più visibile in dark mode */
 }
 
-body, * {
-  transition: 
-    background-color 0.4s ease,
-    color 0.4s ease,
-    border-color 0.4s ease,
-    fill 0.4s ease,
-    stroke 0.4s ease;
-}
-
 svg {
   color: black;
 }
