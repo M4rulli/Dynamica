@@ -7,6 +7,7 @@
 
 import type { ComponentInstance } from "../circuit-library/componentsInstance";
 import { applyTranslations, onLocaleChange, t, translateComponentType } from "../i18n";
+import { appPath } from "../paths";
 
 type InspectorEventDetail = { component: ComponentInstance | null };
 
@@ -50,7 +51,7 @@ function sanitizeNumericInput(raw: string): string {
 }
 
 export async function loadComponentInspector() {
-  const res = await fetch("/static/component-inspector.html");
+  const res = await fetch(appPath("static/component-inspector.html"));
   const html = await res.text();
   const mount = document.getElementById("component-inspector");
   if (!mount) return;

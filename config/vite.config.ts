@@ -1,7 +1,8 @@
 import { defineConfig } from "vite";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   root: "web",
+  base: command === "build" ? "/Dynamica/" : "/",
   build: {
     outDir: "../dist",
     emptyOutDir: true,
@@ -13,4 +14,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

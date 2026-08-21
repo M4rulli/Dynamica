@@ -113,6 +113,22 @@ curl http://127.0.0.1:8000/health
 npm run build
 ```
 
+## Frontend Demo (GitHub Pages)
+
+The static frontend is deployed from `main` with GitHub Actions:
+
+- Public URL: `https://m4rulli.github.io/Dynamica/`
+- Workflow: `.github/workflows/deploy-pages.yml`
+- Published artifact: `dist/`
+
+GitHub repository setup (first deployment only):
+
+1. Open `Settings -> Pages`.
+2. Set `Build and deployment -> Source` to `GitHub Actions`.
+
+The editor and local persistence work in the static demo. Circuit analysis still
+requires the FastAPI service and is not hosted by GitHub Pages.
+
 ## Analysis API
 
 Base URL: `http://127.0.0.1:8000/api/v1`

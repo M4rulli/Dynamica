@@ -10,6 +10,20 @@
 import { loadSettingsPanel } from "./settingsController";
 import { bindExportControls } from "./exportController";
 import { applyTranslations, getLocale, setLocale, t } from "../i18n";
+import { appPath } from "../paths";
+import resistorIcon from "../icons/resistor.svg";
+import capacitorIcon from "../icons/capacitor.svg";
+import inductorIcon from "../icons/inductor.svg";
+import voltageSourceIcon from "../icons/voltage-source.svg";
+import currentSourceIcon from "../icons/current-source.svg";
+
+const componentIcons: Record<string, string> = {
+  resistor: resistorIcon,
+  capacitor: capacitorIcon,
+  inductor: inductorIcon,
+  voltage_source: voltageSourceIcon,
+  current_source: currentSourceIcon,
+};
 
 function bindExpandableMenus(): void {
   document.querySelectorAll<HTMLInputElement>(".nav-toggle-checkbox").forEach((input) => {
@@ -146,7 +160,7 @@ function bindLanguageToggle(): void {
   if (!toggleBtn || !flag) return;
 
   const applyFlag = (lang: "it" | "en") => {
-    flag.src = lang === "it" ? "/flags/it.svg" : "/flags/gb.svg";
+    flag.src = appPath(lang === "it" ? "flags/it.svg" : "flags/gb.svg");
     toggleBtn.setAttribute("aria-label", t("nav.languageCurrent", {
       language: lang === "it" ? t("nav.languageNameIt") : t("nav.languageNameEn"),
     }));
@@ -164,18 +178,24 @@ function bindLanguageToggle(): void {
 }
 
 export async function loadNavbar() {
-  const res = await fetch("/static/navbar.html");
+  const res = await fetch(appPath("static/navbar.html"));
   const html = await res.text();
   const target = document.getElementById("nav-bar");
   if (!target) return;
 
   target.innerHTML = html;
+  const homeLink = target.querySelector<HTMLAnchorElement>("#nav-title");
+  if (homeLink) homeLink.href = appPath();
   applyTranslations(target);
 
   const electricalTarget = document.getElementById("component-library-electrical");
   if (electricalTarget) {
-    const gridRes = await fetch("/static/grid.html");
+    const gridRes = await fetch(appPath("static/grid.html"));
     electricalTarget.innerHTML = await gridRes.text();
+    electricalTarget.querySelectorAll<HTMLImageElement>("img[data-component-icon]").forEach((image) => {
+      const icon = componentIcons[image.dataset.componentIcon ?? ""];
+      if (icon) image.src = icon;
+    });
     applyTranslations(electricalTarget);
   }
 

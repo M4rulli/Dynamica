@@ -9,6 +9,7 @@
  */
 
 import { t, translateComponentType } from "../i18n";
+import { appPath } from "../paths";
 
 type ComponentInstance = {
   id: string;
@@ -238,6 +239,6 @@ export function loadAnalysisControls(): void {
       circuit: { components },
     };
     localStorage.setItem(ANALYSIS_DRAFT_KEY, JSON.stringify(snapshot));
-    window.open("/pages/analysis.html", "_blank", "noopener,noreferrer");
+    window.open(appPath("pages/analysis.html"), "_blank", "noopener,noreferrer");
   });
 }

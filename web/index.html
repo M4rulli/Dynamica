@@ -12,7 +12,7 @@
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="/" aria-label="Dynamica home">
+      <a class="brand" href="%BASE_URL%" aria-label="Dynamica home">
         <span class="brand__mark" aria-hidden="true">D</span>
         <span>Dynamica</span>
       </a>
@@ -24,12 +24,12 @@
 
       <div class="header-actions">
         <button id="landing-language-btn" class="icon-button" type="button" aria-label="Cambia lingua" aria-pressed="false" data-i18n-attr="aria-label:landing.languageToggle">
-          <img id="landing-language-flag" src="/flags/it.svg" alt="" aria-hidden="true" />
+          <img id="landing-language-flag" src="%BASE_URL%flags/it.svg" alt="" aria-hidden="true" />
         </button>
         <button id="landing-theme-btn" class="icon-button" type="button" aria-label="Cambia tema landing" aria-pressed="false" data-i18n-attr="aria-label:landing.themeToggle">
           <i class="bx bx-moon"></i>
         </button>
-        <a class="header-cta" href="/pages/editor.html" data-i18n="landing.enterEditor">Apri l'editor</a>
+        <a class="header-cta" href="%BASE_URL%pages/editor.html" data-i18n="landing.enterEditor">Apri l'editor</a>
       </div>
     </div>
   </header>
@@ -43,7 +43,7 @@
           Disegna lo schema, definisci i parametri e verifica i risultati senza spezzare il flusso di lavoro.
         </p>
         <div class="hero-actions">
-          <a class="button button--primary" href="/pages/editor.html">
+          <a class="button button--primary" href="%BASE_URL%pages/editor.html">
             <span data-i18n="landing.enterEditor">Apri l'editor</span>
             <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
           </a>
@@ -175,7 +175,7 @@
           <span data-i18n="landing.specLabel3">Output</span>
           <strong data-i18n="landing.specValue3">SVG e LaTeX</strong>
         </div>
-        <a class="workflow-cta" href="/pages/editor.html">
+        <a class="workflow-cta" href="%BASE_URL%pages/editor.html">
           <span data-i18n="landing.finalTitle">Inizia con un nuovo circuito</span>
           <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
         </a>
@@ -190,6 +190,7 @@
 
   <script type="module">
     import { applyTranslations, getLocale, initLocale, setLocale } from "/src/i18n.ts";
+    import { appPath } from "/src/paths.ts";
 
     initLocale();
     applyTranslations(document);
@@ -198,7 +199,7 @@
     const languageFlag = document.getElementById("landing-language-flag");
     const applyLanguage = (locale) => {
       if (languageFlag) {
-        languageFlag.src = locale === "it" ? "/flags/it.svg" : "/flags/gb.svg";
+        languageFlag.src = appPath(locale === "it" ? "flags/it.svg" : "flags/gb.svg");
       }
     };
     applyLanguage(getLocale());
